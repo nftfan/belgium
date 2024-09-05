@@ -1,0 +1,1010 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="https://raw.githubusercontent.com/nftfan/delivery/main/Untitled%20design%20(22).png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Delivery</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+	  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Delivery</title>
+    
+    <!-- iOS Web App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Personal Delivery">
+    
+    <!-- iOS Icons (Optional, recommended to create your own) -->
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/nftfan/delivery/main/Untitled%20design%20(23)929292.png">
+    
+    <!-- iOS Splash Screen (Optional, recommended to create your own) -->
+    <link rel="apple-touch-startup-image" href="https://raw.githubusercontent.com/nftfan/delivery/main/Untitled%20design%20(22).png">
+    <!-- Add the Web App Manifest (Optional) -->
+    <link rel="manifest" href="https://raw.githubusercontent.com/nftfan/delivery/main/d2.json">
+    <!-- iOS Viewport Adjustment -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f2f5;
+        }
+        #map {
+            height: 100vh;
+            width: 100vw;
+        }
+        .popup-content {
+    width: 200px; /* Make it more compact */
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2px;
+    
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.popup-title {
+    background-color: #df3056;
+    color: #fff;
+    padding: 2px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.chat-box {
+    height: 120px; /* Adjust height to fit content */
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px;
+    background-color: #f9f9f9;
+}
+
+.chat-input {
+    width: calc(100% - 20px);
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+button {
+    width: calc(100% - 120px);
+    padding: 2px;
+    border: 1px solid #df3056; /* Specify border width, style, and color */
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #df3056;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #f9f9f9;
+}
+
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            height: 100px;
+            overflow-y: auto;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .chat-message {
+            margin-bottom: 8px;
+			font-size: 11px;
+        }
+        .chat-message .message {
+            background-color: #e1ffc7;
+            padding: 5px;
+            border-radius: 4px;
+            display: inline-block;
+			font-size: 11px;
+        }
+        .chat-message .timestamp {
+            font-size: 9px;
+            color: #aaa;
+            margin-left: 5px;
+        }
+        .chat-input {
+            width: calc(100% - 20px);
+            padding: 2px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 10px;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        h1 {
+            text-align: center;
+            background-color: #df3056;
+            padding: 10px;
+            font-size: 12px;
+            margin: 0;
+            position: fixed;
+            width: 100%;
+            color: #ffffff;
+            z-index: 1000;
+        }
+        footer {
+            text-align: center;
+            background-color: #df3056;
+            padding: 4px;
+            font-size: 12px;
+            margin: 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            color: #ffffff;
+            z-index: 1000;
+        }
+        #search-container {
+            position: fixed;
+            bottom: 70px; /* Adjust to ensure visibility above footer */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Added shadow for better visibility */
+            z-index: 1000; /* Ensures it stays on top of other elements */
+        }
+        #search-input {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            width: 200px; /* Adjust as needed */
+        }
+        #search-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        #search-button:hover {
+            background-color: #45a049;
+        }
+        @media only screen and (max-width: 600px) {
+            .popup-content {
+                font-size: 11px;
+            }
+            .popup-content textarea, .popup-content button, .chat-input {
+                font-size: 11px;
+            }
+            h1, footer {
+                font-size: 10px;
+                padding: 3px;
+            }
+            #search-input {
+                width: 150px; /* Adjust as needed */
+            }
+            #search-button {
+                font-size: 10px;
+            }
+        }
+		
+		.help-icon {
+    position: absolute;
+    right: 25px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px; /* Adjust size as needed */
+    height: 25px;
+	border-radius: 5px;
+}
+.helpp-icon {
+    position: absolute;
+    left: 25px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px; /* Adjust size as needed */
+    height: 20px;
+	border-radius: 2px;
+}
+.helppp-icon {
+    position: absolute;
+    right: 25px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(80%);
+    width: 35px; /* Adjust size as needed */
+    height: 35px;
+	border-radius: 2px;
+}
+.cycling-icon {
+    border-radius: 0px; /* Makes the corners round */
+    width: 20px; /* Adjust size as needed */
+    height: 20px;
+    margin-right: 10px; /* Adds space between the icon and the title text */
+    vertical-align: middle; /* Aligns the icon vertically with the text */
+	border: 1px solid #ffffff; /
+}
+
+    </style>
+</head>
+<body>
+    <h1>  <img src="https://raw.githubusercontent.com/nftfan/delivery/main/Untitled%20design%20(23)929292.png" alt="Cycling Icon" class="cycling-icon"> Pick & Bring Leuven 
+    </a> <a href="https://delivery.leuvenflyers.com/help/" target="_blank">
+        <img src="https://hibusm.s3.eu-north-1.amazonaws.com/question.png" alt="Help" class="help-icon">
+    </a>  </a> <a href="https://www.leuvenflyers.com/rider/" target="_blank">
+        <img src="https://hibusm.s3.eu-north-1.amazonaws.com/cycling.gif" alt="Help" class="helppp-icon">
+    </a></h1>
+    <div id="map"></div>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Enter User ID..." />
+        <button id="search-button">Search</button>
+    </div>
+    <footer>Click in the center to start.</footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.140.0.min.js"></script>
+    <script>
+        AWS.config.update({
+            region: 'eu-north-1',
+            credentials: new AWS.Credentials('AKIAVRUVVVUM73M5ULGL', '3CaIv7G5VbNfue6j5g7EOZwAKYPuT8c9VL40QZIx')
+        });
+
+        var dynamoDB = new AWS.DynamoDB.DocumentClient();
+        var tableName = 'date01';
+        var chatIntervals = {};  // To keep track of intervals for different chat boxes
+
+        const bounds = L.latLngBounds([
+            [50.96525044913572, 1.3926331180323672], [51.351105452527136, 2.5796857368771113], [51.65883208527661, 3.4913476284205385], [51.58380188933038, 4.172348077525317], [51.64519945849219, 5.193848751182424], [51.11722120544903, 6.039607373457683], [50.59011525391567, 6.456994745489629], [50.155688347570745, 6.500930258335101], [49.837884295477025, 6.11649452093726], [49.42516820310835, 5.567300610368899], [49.788259238313564, 4.655638718825431], [49.86621862706, 4.062509295411637], [50.16976423571853, 3.82086397476158], [50.35938320741199, 3.381508846306898], [50.562207700435096, 2.6785406407794237], [50.70853794877093, 2.0634434609428536]
+        ]);
+
+        const map = L.map('map', {
+            minZoom: 9,
+            maxZoom: 19,
+            maxBounds: bounds,
+            maxBoundsViscosity: 1.0,
+            zoomControl: false
+        }).fitBounds(bounds);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        map.on('moveend', function() {
+            if (map.getBounds().intersects(bounds)) {
+                return;
+            }
+            map.setView(bounds.getCenter(), map.getZoom());
+        });
+
+       function onMapClick(e) {
+    const latlng = e.latlng;
+    const orderCode = generateOrderCode();
+    const date01 = `${latlng.lat}-${latlng.lng}-${Date.now()}`;
+    const timestamp = new Date().toISOString(); // ISO format for the timestamp
+
+    const popupContent = `
+        <div class="popup-content">
+            <div class="popup-title">User ID: ${orderCode}</div>
+            <div class="chat-box" id="chatBox-${date01}"></div>
+            <textarea id="chatInput-${date01}" class="chat-input" placeholder="Type your message here..."></textarea>
+            <button onclick="sendMessage('${orderCode}', '${date01}')">
+                <img src="https://hibusm.s3.eu-north-1.amazonaws.com/send-message.png" alt="Send" style="width: 20px; height: 20px;">
+            </button>
+        </div>
+    `;
+
+    L.popup()
+        .setLatLng(latlng)
+        .setContent(popupContent)
+        .openOn(map);
+
+    // Trigger Telegram Notification
+    sendTelegramNotification(orderCode, latlng);
+
+    const params = {
+        TableName: tableName,
+        Item: {
+            date01: date01,
+            orderCode: orderCode,
+            coordinates: {
+                lat: latlng.lat,
+                lng: latlng.lng
+            },
+            chat: [
+                {
+                    message: `Welcome! Please note down your User ID: ${orderCode}`,
+                    timestamp: new Date().toLocaleTimeString()
+                },
+                {
+                    message: 'You can reopen this chat anytime by searching your User ID.',
+                    timestamp: new Date().toLocaleTimeString()
+                },
+                {
+                    message: 'Tell us what to pick & bring..?',
+                    timestamp: new Date().toLocaleTimeString()
+                }
+            ],
+            clickTimestamp: timestamp // Adding timestamp to the item
+        }
+    };
+
+    dynamoDB.put(params, function(err, data) {
+        if (err) {
+            console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            console.log("Added item:", JSON.stringify(data, null, 2));
+        }
+    });
+
+    loadChatMessages(date01);
+}
+
+
+function sendTelegramNotification(orderCode, latlng) {
+    const chatId = '2141064153'; // Your personal Telegram chat ID
+    const botToken = '7029060933:AAHHTPvCTlAs6rRp1JpPX5EcOjzrsp0-dak';
+    const { lat, lng } = latlng;
+    
+    // Construct the Google Maps link
+    const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
+    
+    // Create the message text
+    const message = `🚨 New Order Started! 🚨\nUser ID: ${orderCode}\nLocation: [View on Google Maps](${googleMapsUrl})`;
+
+    // Encode the message for the URL
+    const encodedMessage = encodeURIComponent(message);
+
+    // Create the request URL
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodedMessage}&parse_mode=Markdown`;
+
+    // Send the request
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                console.log('Telegram notification sent successfully');
+            } else {
+                console.error('Error sending Telegram notification:', data);
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
+}
+
+
+
+        function loadChatMessages(date01) {
+    const params = {
+        TableName: tableName,
+        Key: {
+            date01: date01
+        }
+    };
+
+    dynamoDB.get(params, function(err, data) {
+        const chatBox = document.getElementById(`chatBox-${date01}`);
+        if (err) {
+            console.error("Unable to retrieve item. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            const messages = data.Item?.chat || [];
+            chatBox.innerHTML = '';  // Clear existing messages
+            messages.forEach(msg => {
+                const chatMessage = document.createElement('div');
+                chatMessage.classList.add('chat-message');
+                chatMessage.innerHTML = `
+                    <div class="message">${msg.message}</div>
+                    <div class="timestamp">${msg.timestamp}</div>
+                `;
+                chatBox.appendChild(chatMessage);
+            });
+            manageChatScroll(chatBox);
+        }
+    });
+
+    // Set up or clear the interval for this chat
+    if (chatIntervals[date01]) {
+        clearInterval(chatIntervals[date01]);
+    }
+    chatIntervals[date01] = setInterval(() => loadChatMessages(date01), 1000);
+}
+
+function manageChatScroll(chatBox) {
+    // Get the current scroll position and the height of the chat box
+    const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 1;
+
+    if (isScrolledToBottom) {
+        // Scroll to the bottom if user is at the bottom
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
+
+
+        function generateOrderCode() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let orderCode = '';
+            for (let i = 0; i < 6; i++) {
+                orderCode += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return orderCode;
+        }
+
+        function sendMessage(orderCode, date01) {
+    const chatInput = document.getElementById(`chatInput-${date01}`);
+    const message = chatInput.value;
+    if (!message.trim()) return;
+    chatInput.value = '';
+
+    const timestamp = new Date().toLocaleTimeString();
+    const chatBox = document.getElementById(`chatBox-${date01}`);
+
+    const chatMessage = document.createElement('div');
+    chatMessage.classList.add('chat-message');
+    chatMessage.innerHTML = `
+        <div class="message">You: ${message}</div>
+        <div class="timestamp">${timestamp}</div>
+    `;
+    chatBox.appendChild(chatMessage);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    const params = {
+        TableName: tableName,
+        Key: {
+            date01: date01
+        },
+        UpdateExpression: 'SET chat = list_append(if_not_exists(chat, :emptyList), :newChatItem)',
+        ExpressionAttributeValues: {
+            ':newChatItem': [{
+                message: `You: ${message}`,
+                timestamp: timestamp
+            }],
+            ':emptyList': []
+        }
+    };
+
+    dynamoDB.update(params, function(err, data) {
+        if (err) {
+            console.error("Unable to add message. Error JSON:", JSON.stringify(err, null, 2));
+        } else {
+            console.log("Added message:", JSON.stringify(data, null, 2));
+            // Notify Telegram about the new message
+            sendTelegramMessageNotification(orderCode, message);
+        }
+    });
+}
+
+function sendTelegramMessageNotification(orderCode, message) {
+    const chatId = '2141064153'; // Your personal Telegram chat ID
+    const botToken = '7029060933:AAHHTPvCTlAs6rRp1JpPX5EcOjzrsp0-dak';
+    const text = `📬 New Message for Order ${orderCode} 📬\nMessage: ${message}`;
+
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                console.log('Telegram notification sent successfully');
+            } else {
+                console.error('Error sending Telegram notification:', data);
+            }
+        })
+        .catch(error => console.error('Fetch error:', error));
+}
+
+
+        function searchChatBox(orderNumber) {
+            const params = {
+                TableName: tableName,
+                FilterExpression: 'orderCode = :orderCode',
+                ExpressionAttributeValues: {
+                    ':orderCode': orderNumber
+                }
+            };
+
+            dynamoDB.scan(params, function(err, data) {
+                if (err) {
+                    console.error("Unable to search item. Error JSON:", JSON.stringify(err, null, 2));
+                } else {
+                    const item = data.Items[0];
+                    if (item) {
+                        const latlng = L.latLng(item.coordinates.lat, item.coordinates.lng);
+                        map.setView(latlng, map.getZoom());
+                        L.popup()
+                            .setLatLng(latlng)
+                            .setContent(`
+                                <div class="popup-content">
+                                    <div class="popup-title">User ID: ${item.orderCode}</div>
+                                    <div class="chat-box" id="chatBox-${item.date01}"></div>
+                                    <textarea id="chatInput-${item.date01}" class="chat-input" placeholder="Type your message here..."></textarea>
+                                    <button onclick="sendMessage('${item.orderCode}', '${item.date01}')">Send</button>
+                                </div>
+                            `)
+                            .openOn(map);
+
+                        loadChatMessages(item.date01);
+                    } else {
+                        alert('Order number not found.');
+                    }
+                }
+            });
+        }
+
+        document.getElementById('search-button').addEventListener('click', function() {
+            const orderNumber = document.getElementById('search-input').value.trim();
+            if (orderNumber) {
+                searchChatBox(orderNumber);
+            }
+        });
+
+        map.on('click', onMapClick);
+		var jsonData3 = { "lng" : { "N" : "4.699659347534181" }, "lat" : { "N" : "50.87601521734375" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTCeDw8GDIiS2GDhjfjAbq9HSYQi81y0NfOQ&s', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('Facebook Marketplace Items <br> Delivery available. <br> Items should be less than 10KG  <br> To know how it works?  <br> Ask in Chat.'); // Optional: add a popup
+	
+	
+	
+	var jsonData3 = { "lng" : { "N" : "4.706482887268067" }, "lat" : { "N" : "50.878425240193245" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/2821782.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('Chocolate Shops <br> Delivery available.'); // Optional: add a popup
+	
+	
+	
+	
+	
+	
+	
+	var jsonData3 = { "lng" : { "N" : "4.690561294555665" }, "lat" : { "N" : "50.88132251839807" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://images-na.ssl-images-amazon.com/images/I/710jEDUrnBL._AC_UL600_SR600,600_.jpg', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('Garbage Bags <br> Delivery available.'); // Optional: add a popup
+	
+	var jsonData3 = { "lng" : { "N" : "4.707606732845307" }, "lat" : { "N" : "50.88070652339176" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/1200px-HEMA_Logo.svg.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('<a href="https://www.hema.com/nl-be" target="_blank">HEMA</a> <br> Delivery available.');
+	
+	
+	var jsonData3 = { "lng" : { "N" : "4.713177680969238" }, "lat" : { "N" : "50.88134959491482" } } ; 
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/unnamed.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('<a href="https://www.dominos.be/nl/winkel/be-leuvendiestsestraat-31188" target="_blank"> Dominos Leuven </a> <br> Delivery available <br> From all stores.');
+	
+	var jsonData3 = { "lng" : { "N" : "4.697256088256837" }, "lat" : { "N" : "50.87013857178763" } }; 
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/pizza-hut-logo-DBFE2E48AF-seeklogo.com.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('<a href="https://www.pizzahut.be/nl/store/delivery-leuven" target="_blank"> Pizza Hut Leuven </a> <br> Delivery available <br> From all stores.');
+	
+	
+	var jsonData3 = { "lng" : { "N" : "4.7089505195617685" }, "lat" : { "N" : "50.87942712312659" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/1084704494593cdda1144c91ef188237.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+.bindPopup('<a href="https://www.mcdonalds.be/" target="_blank">Mcdonalds LEUVEN</a> <br> Delivery available.');
+
+var jsonData3 = { "lng" : { "N" : "4.699058532714845" }, "lat" : { "N" : "50.88313661022974" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Activity/Video%20Game.webp', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('Game Shops in Leuven <br> Delivery available.'); // Optional: add a popup
+	
+	var jsonData3 = { "lng" : { "N" : "4.693050384521485" }, "lat" : { "N" : "50.88354274051537" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/People/Man%20Shrugging.webp', // Use your own URL
+    iconSize: [40, 40], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup(`
+        <div style="background-color: #f8f9fa; padding: 2px; border-radius: 5px;">
+            <h3 style="background-color: #df3056; color: white; padding: 3px; margin: 0; border-radius: 5px 5px 0 0;">ID: DRLHKI</h3>
+            <div style="padding: 2px;">
+                <strong>Helper in Leuven</strong> <br>
+                I can help you in: <br>
+                - Gardening <br>
+                - Moving stuff <br>
+                - Or any other task. <br>
+		<strong> 12€/Hour </strong>
+		
+            </div>
+        </div>
+    `);
+	
+	var jsonData3 = { "lng" : { "N" : "4.6953678131103525" }, "lat" : { "N" : "50.875690260907206" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/pet-food.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup(`
+        <div style="background-color: #a5bad3; padding: 2px; border-radius: 5px;">
+          
+            <div style="padding: 2px;">
+                <strong>Pet Food</strong> <br>
+                I can bring your pet's food. <br>
+                
+		
+            </div>
+        </div>
+    `);
+	
+	var jsonData3 = { "lng" : { "N" : "4.706182479858399" }, "lat" : { "N" : "50.882080654918774" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/plant.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup(`
+        <div style="background-color: #fec37d; padding: 2px; border-radius: 5px;">
+          
+            <div style="padding: 2px;">
+                <strong>Plants & Flowers</strong> <br>
+                I bring Plants & Flowers. <br>
+                
+		
+            </div>
+        </div>
+    `);
+
+var jsonData3 = { "lng" : { "N" : "4.691076278686524" }, "lat" : { "N" : "50.87758580817798" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/18.9L-Bottle.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('Drinking Water <br> Delivery available.'); // Optional: add a popup
+	
+	var jsonData3 = { "lng" : { "N" : "4.705238342285157" }, "lat" : { "N" : "50.874932020410206" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/nftfan/delivery/main/cutlery.png', // Use your own URL
+    iconSize: [30, 30], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup('<strong>Food </strong> <br> I can bring food from <br> any restaurant in Leuven.'); // Optional: add a popup
+   
+   var jsonData3 = { "lng" : { "N" : "4.707040786743165" }, "lat" : { "N" : "50.88321783657009" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/People/Man%20Shrugging.webp', // Use your own URL
+    iconSize: [40, 40], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup(`
+        <div style="background-color: #40cb91; padding: 2px; border-radius: 5px;">
+            <h3 style="background-color: #515151; color: white; padding: 3px; margin: 0; border-radius: 5px 5px 0 0;">ID: PTAWAF</h3>
+            <div style="padding: 2px;">
+                <strong>Laundry in Leuven</strong> <br>
+                I will do your laundry from any <br>
+				 laundry shop of your choice.  <br>
+                Max 10KG <br>
+                
+                
+		<strong> 10€/laundry </strong>
+		
+            </div>
+        </div>
+    `);
+	
+	var jsonData3 = { "lng" : { "N" : "4.692535400390626" }, "lat" : { "N" : "50.87455289553552" } };
+
+var latitude3 = parseFloat(jsonData3.lat.N);
+var longitude3 = parseFloat(jsonData3.lng.N);
+
+
+
+
+
+var customIcon3 = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/Tarikul-Islam-Anik/Telegram-Animated-Emojis/main/Animals%20and%20Nature/Dog%20Face.webp', // Use your own URL
+    iconSize: [40, 40], // Adjust size as needed
+    iconAnchor: [0, 0], // Adjust anchor as needed
+    popupAnchor: [0, 0] // Adjust popup position as needed
+});
+
+
+
+L.marker([latitude3, longitude3], { icon: customIcon3 }).addTo(map)
+    .bindPopup(`
+        <div style="background-color: #cdebb0; padding: 2px; border-radius: 5px;">
+            <h3 style="background-color: #b7b7b6; color: white; padding: 3px; margin: 0; border-radius: 5px 5px 0 0;">ID: PTAWAF</h3>
+            <div style="padding: 2px;">
+                <strong>Pet Sitter</strong> <br>
+                I will take your pet out <br>
+				 for a walk.  <br>
+                Nice and friendly. <br>
+                
+                
+		<strong> 10€/H</strong>
+		
+            </div>
+        </div>
+    `);
+
+
+
+    </script>
+	 <script>
+        // Replace with your Telegram Bot Token and Chat ID
+        const botToken = '7515580049:AAHkZBOprnrY_XN53aohz80HSs8M7QJUphQ';
+        const chatId = '2141064153';
+
+        function sendNotification() {
+            // Get the page title
+            const pageTitle = document.title;
+
+            // Construct the message including the page title
+            const message = `A user has opened the page: ${pageTitle}`;
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log('Notification sent successfully.');
+                    } else {
+                        console.error('Failed to send notification:', data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Attach event listener to DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function() {
+            sendNotification();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

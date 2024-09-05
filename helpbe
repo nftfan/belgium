@@ -1,0 +1,248 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help BE</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+        }
+
+        .content {
+            padding: 40px 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            background-color: #df3056;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        h1 .cycling-icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #df3056;
+            padding: 10px;
+            font-size: 12px;
+            margin: 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            color: #ffffff;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer img {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        .faq-section {
+            margin-top: 60px;
+        }
+
+        .faq-item {
+            background-color: #fff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            padding: 15px;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            color: #333;
+        }
+
+        .faq-question::after {
+            content: '\002B'; /* Plus symbol */
+            position: absolute;
+            right: 20px;
+            font-size: 18px;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px;
+            font-size: 14px;
+            color: #555;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-question::after {
+            content: '\2212'; /* Minus symbol */
+        }
+
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 10px;
+                padding: 5px 0;
+            }
+
+            .cycling-icon {
+                width: 16px;
+                height: 16px;
+            }
+
+            footer img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>
+    <img src="https://hibusm.s3.eu-north-1.amazonaws.com/cycling.gif" alt="Cycling Icon" class="cycling-icon">
+    Pick & Bring Belgium
+</h1>
+
+<div class="content faq-section">
+    <div class="faq-item">
+        <div class="faq-question">1. How to Register as a Service Provider?</div>
+        <div class="faq-answer">
+            <p>
+                - Visit the <strong>Pick & Bring Belgium</strong> website.<br>
+                - Zoom in on the interactive map and <strong>click on the location</strong> where you want to offer services.<br>
+                - In the chat box, type "register" and briefly describe your skills (e.g., delivery, personal assistance, handyman services).<br>
+                - Your profile, including your prices, will then appear on the map for clients in that area to view and contact you.<br>
+            </p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">2. How to Contact a Service Provider?</div>
+        <div class="faq-answer">
+            <p>
+                - On the website map, click on a provider’s profile in your area.<br>
+                - You will see the provider’s skills, services, and prices displayed on their profile.<br>
+                - <strong>To open the chat with a service provider, search for their User ID</strong> listed on their profile and start a conversation.<br>
+                - You can chat directly with the provider to discuss task details and finalize arrangements.<br>
+            </p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">3. How to Pay?</div>
+        <div class="faq-answer">
+            <p>
+               - <strong>Pick & Bring gives you direct access to the service provider</strong>, allowing you to discuss and arrange payments directly with them.<br>
+               - Payment methods and terms are agreed upon between the client and the service provider.<br>
+               - Pick & Bring does not handle payments.<br>
+            </p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">4. Add to Home Screen</div>
+        <div class="faq-answer">
+            <p>- For quicker access, add <strong>Pick & Bring Belgium</strong> to your home screen and use it like an app.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">5. Service Fees</div>
+        <div class="faq-answer">
+            <p>- Prices are clearly listed on each provider’s profile. Review the fees before confirming any service.</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">6. Have Another Question?</div>
+        <div class="faq-answer">
+            <p>- If you have any further questions, feel free to ask the service provider directly through the chat.</p>
+        </div>
+    </div>
+</div>
+
+
+<footer>
+    Everyday life made easy with Pick & Bring.
+    <img src="https://hibusm.s3.eu-north-1.amazonaws.com/boxing.gif" alt="Boxing Icon">
+</footer>
+
+<script>
+    // JavaScript to handle FAQ toggling
+    document.querySelectorAll('.faq-question').forEach(item => {
+        item.addEventListener('click', function() {
+            const faqItem = this.parentElement;
+            faqItem.classList.toggle('active');
+        });
+    });
+
+    // Replace with your Telegram Bot Token and Chat ID
+    const botToken = '7515580049:AAHkZBOprnrY_XN53aohz80HSs8M7QJUphQ';
+    const chatId = '2141064153';
+
+    function sendNotification() {
+        // Get the page title
+        const pageTitle = document.title;
+
+        // Construct the message including the page title
+        const message = `A user has opened the page: ${pageTitle}`;
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log('Notification sent successfully.');
+                } else {
+                    console.error('Failed to send notification:', data);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Attach event listener to DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', function() {
+        sendNotification();
+    });
+</script>
+
+</body>
+</html>
+

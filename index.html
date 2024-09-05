@@ -385,7 +385,7 @@ function sendTelegramNotification(orderCode, latlng) {
     const googleMapsUrl = `https://www.google.com/maps?q=${lat},${lng}`;
     
     // Create the message text
-    const message = `🚨 New Order Started! 🚨\nUser ID: ${orderCode}\nLocation: [View on Google Maps](${googleMapsUrl})`;
+    const message = `Belgium\nUser ID: ${orderCode}\nLocation: [View on Google Maps](${googleMapsUrl})`;
 
     // Encode the message for the URL
     const encodedMessage = encodeURIComponent(message);
@@ -510,7 +510,7 @@ function manageChatScroll(chatBox) {
 function sendTelegramMessageNotification(orderCode, message) {
     const chatId = '2141064153'; // Your personal Telegram chat ID
     const botToken = '7029060933:AAHHTPvCTlAs6rRp1JpPX5EcOjzrsp0-dak';
-    const text = `📬 New Message for Order ${orderCode} 📬\nMessage: ${message}`;
+    const text = `📬 Register ${orderCode} 📬\nMessage: ${message}`;
 
     const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
 
